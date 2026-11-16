@@ -17,9 +17,13 @@ This repository bridges those specification differences so historical Telidon 69
 ```text
 Telidon699toNAPLPS/
 ├── 699toNAPLPS.pl          # CLI entry point, byte-stream parser, state machine, and opcode dispatcher
+├── 699toNAPLPS.py          # Python 3 port of the above (byte-identical output); state held in a Converter class
 ├── Libraries/
 │   ├── Textconv.pm         # Text size (=a), text format (=` ), and baseline displacement converter
 │   ├── Texture.pm          # Fill pattern (=T, =U) to NAPLPS programmable texture mask synthesizer
+│   ├── textconv.py         # Python port of Textconv.pm (text state passed explicitly via TextState)
+│   ├── texture.py          # Python port of Texture.pm (returns (texture, masksize) instead of setting $main::masksize)
+│   ├── bitutil.py          # Emulates Perl pack("B*"), unpack("B*") and number stringification for exact parity
 │   └── texture1.pl~        # Early prototype script for 8x8 bit-packed grid generation
 ├── comparison.md           # Opcode-by-opcode reference table comparing Telidon 699 and NAPLPS (0x00–0x7F)
 ├── comparison.ods          # OpenDocument Spreadsheet version of the 699 vs. NAPLPS opcode table
