@@ -9,7 +9,7 @@ so the values below are empirically tuned approximations.
 
 from dataclasses import dataclass
 
-from .bitutil import byte_bits, pack_bits, perl_num_str
+from bitutil import byte_bits, pack_bits, perl_num_str
 
 # x values indicate number of chars per line;
 # slightly more than spec, so chars are slightly smaller, don't go right to edge.

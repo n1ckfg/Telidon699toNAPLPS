@@ -11,7 +11,7 @@ programmable texture mask that approximates the pattern.
 import math
 import sys
 
-from .bitutil import byte_bits, pack_bits
+from bitutil import byte_bits, pack_bits
 
 DIMENSION = 16
 

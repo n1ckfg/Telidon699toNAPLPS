@@ -12,8 +12,8 @@ diagnostic log in logfile.txt. Output is byte-identical to the Perl original.
 import os
 import sys
 
-from Libraries import textconv, texture
-from Libraries.bitutil import byte_bits
+import textconv, texture
+from bitutil import byte_bits
 
 OUTDIR = 'NAPLPS'
 LOGFILE = 'logfile.txt'
@@ -460,7 +460,7 @@ def main(argv):
                     data = infile.read()
 
             output = converter.convert_file(data, first_file=(filecount == 1))
-            with open(os.fsencode(OUTDIR) + b'/' + path, 'wb') as outfile:
+            with open(os.fsencode(OUTDIR) + b'/' + path + b'.nap', 'wb') as outfile:
                 outfile.write(output)
 
     write_stdout(b'\nAll done\n')
