@@ -14,6 +14,7 @@ import sys
 
 import textconv, texture
 from bitutil import byte_bits
+from identify import identify_bytes
 
 OUTDIR = 'NAPLPS'
 LOGFILE = 'logfile.txt'
@@ -443,23 +444,32 @@ def main(argv):
 
     with open(LOGFILE, 'wb') as logfile:
         converter = Converter(logfile.write)
-        filecount = 0
+        converted_count = 0
         for path in list_input_files(indir):
-            filecount += 1
-
-            # skip com.text files
-            if path.endswith(b'text'):
+            # skip com.text files and subdirectories
+            if path.endswith(b'text') or os.path.isdir(path):
                 logfile.write(b'skipping ' + path + b'\n')
                 continue
+
+            with open(path, 'rb') as infile:
+                data = infile.read()
+
+            result = identify_bytes(data)
+            if result.format != '699':
+                reason = f'not 699 format (detected: {result.format})'
+                if result.note:
+                    reason += f': {result.note}'
+                msg = b'skipping ' + path + b': ' + reason.encode() + b'\n'
+                logfile.write(msg)
+                sys.stderr.buffer.write(msg)
+                sys.stderr.buffer.flush()
+                continue
+
+            converted_count += 1
             write_stdout(path + b'\n')
 
             logfile.write(b'-------------' + path + b'-------------\n\n')
-            data = b''
-            if not os.path.isdir(path):
-                with open(path, 'rb') as infile:
-                    data = infile.read()
-
-            output = converter.convert_file(data, first_file=(filecount == 1))
+            output = converter.convert_file(data, first_file=(converted_count == 1))
             with open(os.fsencode(OUTDIR) + b'/' + path + b'.nap', 'wb') as outfile:
                 outfile.write(output)
 
